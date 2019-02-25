@@ -23,7 +23,7 @@ export default class Home extends React.Component {
     fetch(dataUrl)
       .then(data => data.json())
       .then(res => {
-        // set state.posts to an array of posts 
+        // set state.posts to an array of posts
         if (res && res.data && res.data.children) {
           this.setState({
             posts: res.data.children.map(each => each.data)
@@ -92,7 +92,7 @@ class Post extends React.Component {
     return (
       <Card className="post">
         <CardActionArea>
-          <CardHeader 
+          <CardHeader
             title={this.state.title}
             subheader={this.state.subreddit + ' · Posted by ' + this.state.author}
           />
@@ -105,25 +105,25 @@ class Post extends React.Component {
           </CardContent>
         </CardActionArea>
         <CardActions className="footer">
-          <Button style={{fontSize: '.6rem', fontWeight: '200'}}>
+          <Button className="footer-button">
             <Icon fontSize="small">chat_bubble_outline</Icon>
             <span style={{marginLeft: '5px'}}> {this.state.comments} Comments</span>
           </Button>
-          <Button style={{fontSize: '.6rem', fontWeight: '200'}}>
+          <Button className="footer-button">
             <Icon fontSize="small">share</Icon>
             <span style={{marginLeft: '5px'}}>Share</span>
           </Button>
-          <Button style={{fontSize: '.6rem', fontWeight: '200'}}>
+          <Button className="footer-button">
             <Icon fontSize="small">bookmark_border</Icon>
             <span style={{marginLeft: '5px'}}>Save</span>
           </Button>
           <div>
             <IconButton>
-              <Icon fontSize="small">arrow_upward</Icon> 
+              <Icon fontSize="small">arrow_upward</Icon>
             </IconButton>
             <span style={{fontSize: '.6rem', fontWeight: '200', fontFamily: 'roboto'}}>{this.state.ups.toLocaleString()}</span>
             <IconButton>
-              <Icon fontSize="small">arrow_downward</Icon> 
+              <Icon fontSize="small">arrow_downward</Icon>
             </IconButton>
           </div>
         </CardActions>

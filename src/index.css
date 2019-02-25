@@ -24,5 +24,10 @@ body {
 }
 
 .footer {
-  background-color: #e3f2fd;
+  background-color: #eceff1;
+}
+
+.footer-button {
+  font-weight: 200 !important;
+  font-size: .6rem !important;
 }
