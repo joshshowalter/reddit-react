@@ -25,6 +25,7 @@ body {
 
 .footer {
   background-color: #eceff1;
+  justify-content: center;
 }
 
 .footer-button {

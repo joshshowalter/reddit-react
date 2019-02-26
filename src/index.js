@@ -3,7 +3,6 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import ReactDOM from 'react-dom';
 import Home from './home/home';
 import './index.css';
-import Detail from './home/detail';
 
 const theme = createMuiTheme({
   palette: {
@@ -23,7 +22,6 @@ const theme = createMuiTheme({
 function App() {
   return (
     <MuiThemeProvider theme={theme}>
-      <Detail open={false} />
       <Home />
     </MuiThemeProvider>
   );
