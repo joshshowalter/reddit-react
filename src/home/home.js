@@ -1,0 +1,100 @@
+import React from 'react';
+import {
+  AppBar,
+  Toolbar,
+  Typography
+} from '@material-ui/core';
+
+import '../index.css';
+import Post from './post';
+import Detail from './detail';
+
+export default class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      posts: [],
+      postComments: [],
+      detailVisible: false,
+      loadingComments: false
+    };
+    this.fetchPosts();
+  }
+
+  /*
+    Fetch the first 25 posts from reddit frontpage and store them to state.posts
+  */
+  fetchPosts() {
+    const dataUrl = 'https://www.reddit.com/.json?raw_json=1';
+    fetch(dataUrl)
+      .then(data => data.json())
+      .then(res => {
+        // set state.posts to an array of posts
+        if (res && res.data && res.data.children) {
+          this.setState({
+            posts: res.data.children.map(each => each.data)
+          });
+        }
+        return res;
+      });
+  }
+
+  fetchComments(link) {
+    this.setState({loadingComments: true});
+    const dataUrl = 'https://www.reddit.com' + link + '.json?raw_json=1';
+    fetch(dataUrl)
+      .then(data => data.json())
+      .then(res => {
+        // make a getter for this
+        if (res && res[1] && res[1].data && res[1].data.children) {
+          this.setState({
+            postComments: res[1].data.children.map(each => each.data),
+            detailVisible: true,
+            loadingComments: false
+          });
+        }
+        return res;
+      });
+  }
+
+  onCommentClick = (event, link) => {
+    this.fetchComments(link);
+  }
+
+  onDetailClose = (e) => {
+    this.setState({ detailVisible: false });
+  }
+
+  render() {
+    const posts = this.state.posts.map(post => {
+      return <Post
+                key={post.id}
+                post={post}
+                loading={this.state.loadingComments}
+                onCommentClick={this.onCommentClick}
+             />
+    });
+
+    return (
+      <div>
+        <AppBar position="sticky" color="primary">
+          <Toolbar>
+            <Typography variant="h5" color="inherit">
+              Reddit
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ display: 'inline-block' }}>
+            {posts}
+          </div>
+        </div>
+        <Detail
+          comments={this.state.postComments}
+          visible={this.state.detailVisible}
+          onClose={this.onDetailClose}
+        />
+      </div>
+    );
+  }
+}
