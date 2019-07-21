@@ -8,6 +8,7 @@ import {
 import '../index.css';
 import Post from './post';
 import Detail from './detail';
+import { string } from 'prop-types';
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -16,7 +17,8 @@ export default class Home extends React.Component {
       posts: [],
       postComments: [],
       detailVisible: false,
-      loadingComments: false
+      loadingComments: false,
+      loadingId: ''
     };
     this.fetchPosts();
   }
@@ -39,8 +41,8 @@ export default class Home extends React.Component {
       });
   }
 
-  fetchComments(link) {
-    this.setState({loadingComments: true});
+  fetchComments(link, id) {
+    this.setState({loadingComments: true, loadingId: id});
     const dataUrl = 'https://www.reddit.com' + link + '.json?raw_json=1';
     fetch(dataUrl)
       .then(data => data.json())
@@ -50,15 +52,16 @@ export default class Home extends React.Component {
           this.setState({
             postComments: res[1].data.children.map(each => each.data),
             detailVisible: true,
-            loadingComments: false
+            loadingComments: false,
+            loadingId: ''
           });
         }
         return res;
       });
   }
 
-  onCommentClick = (event, link) => {
-    this.fetchComments(link);
+  onCommentClick = (event, link, id) => {
+    this.fetchComments(link, id);
   }
 
   onDetailClose = (e) => {
@@ -71,6 +74,7 @@ export default class Home extends React.Component {
                 key={post.id}
                 post={post}
                 loading={this.state.loadingComments}
+                loadingId={this.state.loadingId}
                 onCommentClick={this.onCommentClick}
              />
     });
@@ -79,7 +83,7 @@ export default class Home extends React.Component {
       <div>
         <AppBar position="sticky" color="primary">
           <Toolbar>
-            <Typography variant="h5" color="inherit">
+            <Typography style={{fontWeight: '300'}} variant="h5" color="inherit">
               Reddit
             </Typography>
           </Toolbar>
