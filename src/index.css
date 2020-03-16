@@ -32,3 +32,9 @@ body {
   font-weight: 200 !important;
   font-size: .6rem !important;
 }
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

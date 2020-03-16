@@ -18,12 +18,13 @@ export default class Home extends React.Component {
       postComments: [],
       detailVisible: false,
       loadingComments: false,
-      loadingId: ''
+      loadingId: '',
+      me: {}
     };
-    this.fetchPosts();
+    this.fetchAll();
   }
 
-  fetchPosts() {
+  fetchAll() {
     const url = 'http://localhost:4000/graphql';
     const query = `query {
       getBest,
@@ -40,38 +41,22 @@ export default class Home extends React.Component {
       })
     })
       .then(data => data.json())
-      .then(res => {
-        if (res && res.data && res.data.getBest) {
-          const jsonData = JSON.parse(res.data.getBest);
-          console.log('data', jsonData);
+      .then(response => {
+        if (response && response.data && response.data.getBest) {
+          const posts = JSON.parse(response.data.getBest);
+          console.log('data', posts);
           this.setState({
-            posts: jsonData
+            posts: posts 
           });
         }
-        if (res && res.data && res.data.getMe) {
-          const jsonData = JSON.parse(res.data.getMe);
-          console.log('me', jsonData);
+        if (response && response.data && response.data.getMe) {
+          const meData = JSON.parse(response.data.getMe);
+          this.setState({
+            me: meData
+          });
         }
       })
   }
-
-  /*
-    Fetch the first 25 posts from reddit frontpage and store them to state.posts
-  */
-  // fetchPosts() {
-  //   const dataUrl = 'https://www.reddit.com/.json?raw_json=1';
-  //   fetch(dataUrl)
-  //     .then(data => data.json())
-  //     .then(res => {
-  //       // set state.posts to an array of posts
-  //       if (res && res.data && res.data.children) {
-  //         this.setState({
-  //           posts: res.data.children.map(each => each.data)
-  //         });
-  //       }
-  //       return res;
-  //     });
-  // }
 
   fetchComments(link, id) {
     this.setState({loadingComments: true, loadingId: id});
@@ -102,21 +87,26 @@ export default class Home extends React.Component {
 
   render() {
     const posts = this.state.posts.map(post => {
-      return <Post
-                key={post.id}
-                post={post}
-                loading={this.state.loadingComments}
-                loadingId={this.state.loadingId}
-                onCommentClick={this.onCommentClick}
-             />
+      return (
+        <Post
+          key={ post.id }
+          post={ post }
+          loading={ this.state.loadingComments }
+          loadingId={ this.state.loadingId }
+          onCommentClick={ this.onCommentClick }
+        />
+      );
     });
 
     return (
       <div>
         <AppBar position="sticky" color="primary">
-          <Toolbar>
+          <Toolbar className="toolbar">
             <Typography style={{fontWeight: '300'}} variant="h5" color="inherit">
               Reddit
+            </Typography>
+            <Typography style={{ fontWeight: '300', fontSize: '16px' }} color="inherit">
+              { this.state.me.name }
             </Typography>
           </Toolbar>
         </AppBar>
@@ -126,9 +116,9 @@ export default class Home extends React.Component {
           </div>
         </div>
         <Detail
-          comments={this.state.postComments}
-          visible={this.state.detailVisible}
-          onClose={this.onDetailClose}
+          comments={ this.state.postComments }
+          visible={ this.state.detailVisible }
+          onClose={ this.onDetailClose }
         />
       </div>
     );
