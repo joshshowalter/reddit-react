@@ -25,7 +25,7 @@ export default class Detail extends React.Component {
       return <Comment
                 key={comment.id}
                 comment={comment}
-            />
+             />
     });
 
     return (

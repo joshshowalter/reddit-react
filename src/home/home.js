@@ -23,23 +23,55 @@ export default class Home extends React.Component {
     this.fetchPosts();
   }
 
+  fetchPosts() {
+    const url = 'http://localhost:4000/graphql';
+    const query = `query {
+      getBest,
+      getMe
+    }`;
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        query
+      })
+    })
+      .then(data => data.json())
+      .then(res => {
+        if (res && res.data && res.data.getBest) {
+          const jsonData = JSON.parse(res.data.getBest);
+          console.log('data', jsonData);
+          this.setState({
+            posts: jsonData
+          });
+        }
+        if (res && res.data && res.data.getMe) {
+          const jsonData = JSON.parse(res.data.getMe);
+          console.log('me', jsonData);
+        }
+      })
+  }
+
   /*
     Fetch the first 25 posts from reddit frontpage and store them to state.posts
   */
-  fetchPosts() {
-    const dataUrl = 'https://www.reddit.com/.json?raw_json=1';
-    fetch(dataUrl)
-      .then(data => data.json())
-      .then(res => {
-        // set state.posts to an array of posts
-        if (res && res.data && res.data.children) {
-          this.setState({
-            posts: res.data.children.map(each => each.data)
-          });
-        }
-        return res;
-      });
-  }
+  // fetchPosts() {
+  //   const dataUrl = 'https://www.reddit.com/.json?raw_json=1';
+  //   fetch(dataUrl)
+  //     .then(data => data.json())
+  //     .then(res => {
+  //       // set state.posts to an array of posts
+  //       if (res && res.data && res.data.children) {
+  //         this.setState({
+  //           posts: res.data.children.map(each => each.data)
+  //         });
+  //       }
+  //       return res;
+  //     });
+  // }
 
   fetchComments(link, id) {
     this.setState({loadingComments: true, loadingId: id});
