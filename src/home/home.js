@@ -2,24 +2,29 @@ import React from 'react';
 import {
   AppBar,
   Toolbar,
-  Typography
+  Typography,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
 } from '@material-ui/core';
 
 import '../index.css';
 import Post from './post';
 import Detail from './detail';
-import { string } from 'prop-types';
 
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: [],
-      postComments: [],
       detailVisible: false,
       loadingComments: false,
       loadingId: '',
-      me: {}
+      me: {},
+      posts: [],
+      postComments: [],
+      selectedSub: '',
+      subreddits: []
     };
     this.fetchAll();
   }
@@ -28,7 +33,8 @@ export default class Home extends React.Component {
     const url = 'http://localhost:4000/graphql';
     const query = `query {
       getBest,
-      getMe
+      getMe,
+      getSubs
     }`;
     fetch(url, {
       method: 'POST',
@@ -42,17 +48,27 @@ export default class Home extends React.Component {
     })
       .then(data => data.json())
       .then(response => {
-        if (response && response.data && response.data.getBest) {
+        if (!response || !response.data) {
+          return;
+        }
+
+        if (response.data.getBest) {
           const posts = JSON.parse(response.data.getBest);
           console.log('data', posts);
           this.setState({
             posts: posts 
           });
         }
-        if (response && response.data && response.data.getMe) {
+        if (response.data.getMe) {
           const meData = JSON.parse(response.data.getMe);
           this.setState({
             me: meData
+          });
+        }
+        if (response.data.getSubs) {
+          const subs = JSON.parse(response.data.getSubs);
+          this.setState({
+            subreddits: subs
           });
         }
       })
@@ -85,6 +101,10 @@ export default class Home extends React.Component {
     this.setState({ detailVisible: false });
   }
 
+  onSubSelect = (event) => {
+    this.setState({selectedSub: event.target.value });
+  }
+
   render() {
     const posts = this.state.posts.map(post => {
       return (
@@ -98,6 +118,26 @@ export default class Home extends React.Component {
       );
     });
 
+    const sorted = this.state.subreddits.sort((a, b) => {
+      if (a.display_name.toLowerCase() < b.display_name.toLowerCase()) {
+        return -1;
+      } else if (a.display_name.toLowerCase() > b.display_name.toLowerCase()) {
+        return 1;
+      } else {
+        return 0;
+      }
+    })
+    const subreddits = sorted.map(sub => {
+      return (
+        <MenuItem 
+          value={sub.display_name}
+          key={sub.display_name}
+        >
+          { sub.display_name }
+        </MenuItem>
+      );
+    })
+
     return (
       <div>
         <AppBar position="sticky" color="primary">
@@ -110,6 +150,17 @@ export default class Home extends React.Component {
             </Typography>
           </Toolbar>
         </AppBar>
+        <div style={{ textAlign: 'right' }}>
+          <FormControl style={{ minWidth: '120px', margin: '16px', textAlign: 'left'}}>
+            <InputLabel>Subreddits</InputLabel>
+            <Select
+              value={this.state.selectedSub}
+              onChange={this.onSubSelect}
+            >
+              { subreddits }
+            </Select>
+          </FormControl>
+        </div>
         <div style={{ textAlign: 'center' }}>
           <div style={{ display: 'inline-block' }}>
             {posts}

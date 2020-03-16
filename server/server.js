@@ -14,7 +14,8 @@ const requester = new snoowrap({
 const schema = buildSchema(`
   type Query {
     getBest: String,
-    getMe: String
+    getMe: String,
+    getSubs: String
   }
 `);
 
@@ -27,6 +28,11 @@ const root = {
   getMe: async () => {
     me = requester.getMe();
     const data = await me;
+    return JSON.stringify(data);
+  },
+  getSubs: async () => {
+    subs = requester.getSubscriptions();
+    const data = await subs;
     return JSON.stringify(data);
   }
 }

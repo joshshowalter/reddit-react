@@ -3,9 +3,7 @@ import {
   Dialog,
   Card,
   CardContent,
-  Toolbar,
 } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
 
 export default class Detail extends React.Component {
   constructor(props) {

@@ -9,7 +9,8 @@ import {
   Button,
   Icon,
   IconButton,
-  CircularProgress
+  CircularProgress,
+  Paper
 } from '@material-ui/core';
 
 import '../index.css';
@@ -54,59 +55,61 @@ export default class Post extends React.Component {
 
   render() {
     return (
-      <Card className="post">
-        <CardActionArea>
-          <CardHeader style={{fontWeight: '300'}}
-            title={this.state.title}
-            subheader={this.state.subreddit + ' · Posted by ' + this.state.author}
-          />
-          {
-            this.state.media_embed &&
-            <div dangerouslySetInnerHTML={{ __html: this.state.media_embed }}></div>
-          }
-          {
-            !this.state.media_embed && this.state.preview &&
-            <CardMedia
-              style={{display: this.state.preview ? 'inherit' : 'none'}}
-              className="preview-image"
-              image={this.state.preview}
+      <Paper elevation={4}>
+        <Card className="post">
+          <CardActionArea>
+            <CardHeader style={{fontWeight: '300'}}
+              title={this.state.title}
+              subheader={this.state.subreddit + ' · Posted by ' + this.state.author}
             />
-          }
-          <CardContent>
-          </CardContent>
-        </CardActionArea>
-        <CardActions className="footer">
-          <Button
-            className="footer-button"
-            disabled={this.props.loading}
-            onClick={this.commentClick}>
-            <Icon fontSize="small">chat_bubble_outline</Icon>
-            <span style={{marginLeft: '5px'}}> {this.state.comments} Comments</span>
-            {this.props.loading && this.props.loadingId === this.state.id &&
-              <CircularProgress style={{marginLeft: '1rem'}}size={20}></CircularProgress>
+            {
+              this.state.media_embed &&
+              <div dangerouslySetInnerHTML={{ __html: this.state.media_embed }}></div>
             }
-          </Button>
-          <Button className="footer-button">
-            <Icon fontSize="small">share</Icon>
-            <span style={{marginLeft: '5px'}}>Share</span>
-          </Button>
-          <Button className="footer-button">
-            <Icon fontSize="small">bookmark_border</Icon>
-            <span style={{marginLeft: '5px'}}>Save</span>
-          </Button>
+            {
+              !this.state.media_embed && this.state.preview &&
+              <CardMedia
+                style={{display: this.state.preview ? 'inherit' : 'none'}}
+                className="preview-image"
+                image={this.state.preview}
+              />
+            }
+            <CardContent>
+            </CardContent>
+          </CardActionArea>
+          <CardActions className="footer">
+            <Button
+              className="footer-button"
+              disabled={this.props.loading}
+              onClick={this.commentClick}>
+              <Icon fontSize="small">chat_bubble_outline</Icon>
+              <span style={{marginLeft: '5px'}}> {this.state.comments} Comments</span>
+              {this.props.loading && this.props.loadingId === this.state.id &&
+                <CircularProgress style={{marginLeft: '1rem'}}size={20}></CircularProgress>
+              }
+            </Button>
+            <Button className="footer-button">
+              <Icon fontSize="small">share</Icon>
+              <span style={{marginLeft: '5px'}}>Share</span>
+            </Button>
+            <Button className="footer-button">
+              <Icon fontSize="small">bookmark_border</Icon>
+              <span style={{marginLeft: '5px'}}>Save</span>
+            </Button>
 
-          {/* Upvote buttons */}
-          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-            <IconButton>
-              <Icon fontSize="small">arrow_upward</Icon>
-            </IconButton>
-            <span style={{fontSize: '.6rem', fontWeight: '200', fontFamily: 'roboto'}}>{this.state.ups.toLocaleString()}</span>
-            <IconButton>
-              <Icon fontSize="small">arrow_downward</Icon>
-            </IconButton>
-          </div>
-        </CardActions>
-      </Card>
+            {/* Upvote buttons */}
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+              <IconButton>
+                <Icon fontSize="small">arrow_upward</Icon>
+              </IconButton>
+              <span style={{fontSize: '.6rem', fontWeight: '200', fontFamily: 'roboto'}}>{this.state.ups.toLocaleString()}</span>
+              <IconButton>
+                <Icon fontSize="small">arrow_downward</Icon>
+              </IconButton>
+            </div>
+          </CardActions>
+        </Card>
+      </Paper>
     );
   }
 }
