@@ -72,8 +72,11 @@ export default class Post extends React.Component {
               image={this.state.preview}
             />
           }
-          <CardContent>
-          </CardContent>
+
+          {/* CardActionArea used to do the hover highlight. Could remove that and replace with CardContent with some CSS. 
+          Probs better practice */}
+          {/* <CardContent>
+          </CardContent> */}
         </CardActionArea>
         <CardActions className="footer">
           <Button

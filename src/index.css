@@ -24,11 +24,14 @@ body {
 }
 
 .footer {
-  background-color: #eceff1;
+  background-color: white;
   justify-content: space-around;
 }
 
 .footer-button {
   font-weight: 200 !important;
   font-size: .6rem !important;
+}
+iframe {
+  width: 100%;
 }

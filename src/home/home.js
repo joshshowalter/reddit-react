@@ -27,17 +27,14 @@ export default class Home extends React.Component {
     Fetch the first 25 posts from reddit frontpage and store them to state.posts
   */
   fetchPosts() {
-    const dataUrl = 'https://www.reddit.com/.json?raw_json=1';
+    const dataUrl = 'https://4ph5mvcun6.execute-api.us-east-1.amazonaws.com/api/bestAll';
     fetch(dataUrl)
       .then(data => data.json())
-      .then(res => {
-        // set state.posts to an array of posts
-        if (res && res.data && res.data.children) {
-          this.setState({
-            posts: res.data.children.map(each => each.data)
-          });
-        }
-        return res;
+      .then(data => {
+        this.setState({
+          posts: data
+        });
+        return data;
       });
   }
 
