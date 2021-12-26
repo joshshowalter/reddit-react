@@ -10,6 +10,8 @@ import Post from './post';
 import Detail from './detail';
 import { string } from 'prop-types';
 
+import { baseURL } from '../conf'
+
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -27,7 +29,8 @@ export default class Home extends React.Component {
     Fetch the first 25 posts from reddit frontpage and store them to state.posts
   */
   fetchPosts() {
-    const dataUrl = 'https://4ph5mvcun6.execute-api.us-east-1.amazonaws.com/api/bestAll';
+    // const dataUrl = 'https://4ph5mvcun6.execute-api.us-east-1.amazonaws.com/api/bestAll';
+    const dataUrl = `${baseURL}/bestAll`;
     fetch(dataUrl)
       .then(data => data.json())
       .then(data => {
