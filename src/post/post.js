@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 
 import '../index.css';
+import { upvote, downvote, fetchPost } from './postAPI';
 
 export default class Post extends React.Component {
   constructor(props) {
@@ -29,6 +30,7 @@ export default class Post extends React.Component {
     const ups = (post.ups / 1000 > 1) ? (post.ups / 1000).toFixed(1) + 'k' : post.ups;
     const id = post.id;
     const media_embed = post.media_embed ? post.media_embed.content : '';
+    const liked = post.likes;
     let preview = '';
     if (post.preview && post.preview.images && post.preview.images[0] && post.preview.images[0].source && post.preview.images[0].source.url) {
       preview = post.preview.images[0].source.url;
@@ -42,7 +44,8 @@ export default class Post extends React.Component {
       comments,
       ups,
       id,
-      media_embed
+      media_embed,
+      liked
     };
   }
 
@@ -50,10 +53,22 @@ export default class Post extends React.Component {
     this.props.onCommentClick(e, this.state.id);
   }
 
+  upvoteClick = (e) => {
+    upvote(this.state.id).then(() => this.setState({liked: true}));
+  }
+
+  downvoteClick = (e) => {
+    downvote(this.state.id).then(() => this.setState({liked: false}));
+  }
+
+  postClick = (e) => {
+    fetchPost(this.state.id);
+  }
+
   render() {
     return (
       <Card className="post">
-        <CardActionArea>
+        <CardActionArea onClick={this.postClick}>
           <CardHeader style={{fontWeight: '300'}}
             title={this.state.title}
             subheader={this.state.subreddit + ' · Posted by ' + this.state.author}
@@ -98,12 +113,12 @@ export default class Post extends React.Component {
 
           {/* Upvote buttons */}
           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-            <IconButton>
-              <Icon fontSize="small">arrow_upward</Icon>
+            <IconButton onClick={this.upvoteClick}>
+              <Icon fontSize="small" style={{color: this.state.liked ? '#ff4500' : ''}}>arrow_upward</Icon>
             </IconButton>
-            <span style={{fontSize: '.6rem', fontWeight: '200', fontFamily: 'roboto'}}>{this.state.ups.toLocaleString()}</span>
-            <IconButton>
-              <Icon fontSize="small">arrow_downward</Icon>
+            <span style={{fontSize: '.6rem', fontWeight: '200', fontFamily: 'roboto', color: this.state.liked ? '#ff4500' : this.state.liked === false ? '#7193ff' : ''}}>{this.state.ups.toLocaleString()}</span>
+            <IconButton onClick={this.downvoteClick}>
+              <Icon fontSize="small" style={{color: this.state.liked === false ? '#7193ff' : ''}}>arrow_downward</Icon>
             </IconButton>
           </div>
         </CardActions>
