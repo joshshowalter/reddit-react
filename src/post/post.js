@@ -25,7 +25,6 @@ export default class Post extends React.Component {
     const title = post.title;
     const subreddit = post.subreddit_name_prefixed;
     const author = post.author;
-    const link = post.permalink;
     const comments = (post.num_comments / 1000 > 1) ? (post.num_comments / 1000).toFixed(1) + 'k' : post.num_comments;
     const ups = (post.ups / 1000 > 1) ? (post.ups / 1000).toFixed(1) + 'k' : post.ups;
     const id = post.id;
@@ -36,20 +35,19 @@ export default class Post extends React.Component {
     }
 
     return {
-      title: title,
-      subreddit: subreddit,
-      author: author,
-      preview: preview,
-      link: link,
-      comments: comments,
-      ups: ups,
-      id: id,
-      media_embed: media_embed
+      title,
+      subreddit,
+      author,
+      preview,
+      comments,
+      ups,
+      id,
+      media_embed
     };
   }
 
   commentClick = (e) => {
-    this.props.onCommentClick(e, this.state.link, this.state.id);
+    this.props.onCommentClick(e, this.state.id);
   }
 
   render() {

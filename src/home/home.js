@@ -6,11 +6,12 @@ import {
 } from '@material-ui/core';
 
 import '../index.css';
-import Post from './post';
-import Detail from './detail';
+import Post from '../post/post';
+import Detail from '../detail/detail';
 import { string } from 'prop-types';
 
 import { baseURL } from '../conf'
+import { fetchPosts, fetchComments } from './homeAPI';
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -22,46 +23,25 @@ export default class Home extends React.Component {
       loadingComments: false,
       loadingId: ''
     };
-    this.fetchPosts();
-  }
 
-  /*
-    Fetch the first 25 posts from reddit frontpage and store them to state.posts
-  */
-  fetchPosts() {
-    // const dataUrl = 'https://4ph5mvcun6.execute-api.us-east-1.amazonaws.com/api/bestAll';
-    const dataUrl = `${baseURL}/bestAll`;
-    fetch(dataUrl)
-      .then(data => data.json())
-      .then(data => {
-        this.setState({
-          posts: data
-        });
-        return data;
+    fetchPosts().then(data => {
+      this.setState({
+        posts: data
       });
+    });
   }
 
-  fetchComments(link, id) {
+  onCommentClick = (event, id) => {
     this.setState({loadingComments: true, loadingId: id});
-    const dataUrl = 'https://www.reddit.com' + link + '.json?raw_json=1';
-    fetch(dataUrl)
-      .then(data => data.json())
-      .then(res => {
-        // make a getter for this
-        if (res && res[1] && res[1].data && res[1].data.children) {
-          this.setState({
-            postComments: res[1].data.children.map(each => each.data),
-            detailVisible: true,
-            loadingComments: false,
-            loadingId: ''
-          });
-        }
-        return res;
-      });
-  }
 
-  onCommentClick = (event, link, id) => {
-    this.fetchComments(link, id);
+    fetchComments(id).then(data => {
+      this.setState({
+        postComments: data,
+        detailVisible: true,
+        loadingComments: false,
+        loadingId: ''
+      })
+    });
   }
 
   onDetailClose = (e) => {
