@@ -5,7 +5,6 @@ import {
   CardActions,
   CardActionArea,
   CardMedia,
-  CardContent,
   Button,
   Icon,
   IconButton,

@@ -9,9 +9,7 @@ import {
 import '../index.css';
 import Post from '../post/post';
 import Detail from '../detail/detail';
-import { string } from 'prop-types';
 
-import { baseURL } from '../conf'
 import { fetchPosts, fetchComments } from './homeAPI';
 
 export default class Home extends React.Component {
