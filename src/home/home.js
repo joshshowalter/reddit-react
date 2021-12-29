@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -12,77 +12,69 @@ import Detail from '../detail/detail';
 
 import { fetchPosts, fetchComments } from './homeAPI';
 
-export default class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      posts: [],
-      postComments: [],
-      detailVisible: false,
-      loadingComments: false,
-      loadingId: '',
-      loadingPosts: true
-    };
+function Home(props) {
+  const [posts, setPosts] = useState([]);
+  const [postComments, setPostComments] = useState([]);
+  const [detailVisible, setDetailVisible] = useState(false);
+  const [loadingComments, setLoadingComments] = useState(false);
+  const [loadingId, setLoadingId] = useState('');
+  const [loadingPosts, setLoadingPosts] = useState(true);
 
-    fetchPosts().then(data => {
-      this.setState({
-        posts: data,
-        loadingPosts: false
-      });
-    });
-  }
+  fetchPosts().then(data => {
+    setPosts(data);
+    setLoadingPosts(false);
+  });
 
-  onCommentClick = (event, id) => {
-    this.setState({loadingComments: true, loadingId: id});
+  const onCommentClick = (event, id) => {
+    setLoadingComments(true);
+    setLoadingId(id);
 
     fetchComments(id).then(data => {
-      this.setState({
-        postComments: data,
-        detailVisible: true,
-        loadingComments: false,
-        loadingId: ''
-      })
+      setPostComments(data);
+      setDetailVisible(true);
+      setLoadingComments(false);
+      setLoadingId('');
     });
   }
 
-  onDetailClose = (e) => {
-    this.setState({ detailVisible: false });
+  const onDetailClose = (e) => {
+    setDetailVisible(false);
   }
 
-  render() {
-    const posts = this.state.posts.map(post => {
-      return <Post
-                key={post.id}
-                post={post}
-                loading={this.state.loadingComments}
-                loadingId={this.state.loadingId}
-                onCommentClick={this.onCommentClick}
-             />
-    });
+  const postsList = posts.map(post => {
+    return <Post
+              key={post.id}
+              post={post}
+              loading={loadingComments}
+              loadingId={loadingId}
+              onCommentClick={onCommentClick}
+            />
+  });
 
-    return (
-      <div>
-        <AppBar position="sticky" color="primary">
-          <Toolbar>
-            <Typography style={{fontWeight: '300'}} variant="h5" color="inherit">
-              Reddit
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <div style={{ textAlign: 'center' }}>
-          {this.state.loadingPosts &&
-            <CircularProgress style={{marginTop: '2rem'}}size={40}></CircularProgress>
-          }
-          <div style={{ display: 'inline-block' }}>
-            {posts}
-          </div>
+  return (
+    <div>
+      <AppBar position="sticky" color="primary">
+        <Toolbar>
+          <Typography style={{fontWeight: '300'}} variant="h5" color="inherit">
+            Reddit
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <div style={{ textAlign: 'center' }}>
+        {loadingPosts &&
+          <CircularProgress style={{marginTop: '2rem'}}size={40}></CircularProgress>
+        }
+        <div style={{ display: 'inline-block' }}>
+          {postsList}
         </div>
-        <Detail
-          comments={this.state.postComments}
-          visible={this.state.detailVisible}
-          onClose={this.onDetailClose}
-        />
       </div>
-    );
-  }
+      <Detail
+        comments={postComments}
+        visible={detailVisible}
+        onClose={onDetailClose}
+      />
+    </div>
+  );
 }
+
+export default Home;
