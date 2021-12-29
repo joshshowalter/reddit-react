@@ -2,7 +2,8 @@ import React from 'react';
 import {
   AppBar,
   Toolbar,
-  Typography
+  Typography,
+  CircularProgress
 } from '@material-ui/core';
 
 import '../index.css';
@@ -21,12 +22,14 @@ export default class Home extends React.Component {
       postComments: [],
       detailVisible: false,
       loadingComments: false,
-      loadingId: ''
+      loadingId: '',
+      loadingPosts: true
     };
 
     fetchPosts().then(data => {
       this.setState({
-        posts: data
+        posts: data,
+        loadingPosts: false
       });
     });
   }
@@ -69,6 +72,9 @@ export default class Home extends React.Component {
           </Toolbar>
         </AppBar>
         <div style={{ textAlign: 'center' }}>
+          {this.state.loadingPosts &&
+            <CircularProgress style={{marginTop: '2rem'}}size={40}></CircularProgress>
+          }
           <div style={{ display: 'inline-block' }}>
             {posts}
           </div>
