@@ -1,7 +1,7 @@
 import { baseURL } from '../conf';
 
 /*
-  Fetch the first 25 posts from reddit frontpage and store them to state.posts
+  Fetch the first 25 posts from best 
 */
 export const fetchPosts = () => {
   const url = `${baseURL}/bestAll`;

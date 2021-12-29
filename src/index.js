@@ -2,7 +2,9 @@ import React from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import ReactDOM from 'react-dom';
 import Home from './home/home';
+// import Detail from './detail/detail';
 import './index.css';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 const theme = createMuiTheme({
   palette: {
@@ -22,12 +24,30 @@ const theme = createMuiTheme({
 function App() {
   return (
     <MuiThemeProvider theme={theme}>
-      <Home />
+      <Switch>
+        <Route exact path="/">
+          <Home />
+        </Route>
+        <Route path="/post/:id">
+          <Temp />
+        </Route>
+        <Route render={() => <Redirect to="/"/>}/>
+      </Switch>
     </MuiThemeProvider>
   );
 }
 
 ReactDOM.render(
-  <App />,
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
   document.getElementById('root')
 );
+
+function Temp() {
+  return (
+    <>
+      <div>Hello!</div>
+    </>
+  )
+}
