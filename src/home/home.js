@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -12,7 +12,7 @@ import Detail from '../detail/detail';
 
 import { fetchPosts, fetchComments } from './homeAPI';
 
-function Home(props) {
+export default function Home(props) {
   const [posts, setPosts] = useState([]);
   const [postComments, setPostComments] = useState([]);
   const [detailVisible, setDetailVisible] = useState(false);
@@ -20,10 +20,14 @@ function Home(props) {
   const [loadingId, setLoadingId] = useState('');
   const [loadingPosts, setLoadingPosts] = useState(true);
 
-  fetchPosts().then(data => {
-    setPosts(data);
-    setLoadingPosts(false);
-  });
+  // this is a bit hacky using [] as the dependency. Likely need to refactor this with a feed component 
+  useEffect(() => {
+    fetchPosts().then(data => {
+      setPosts(data);
+      setLoadingPosts(false);
+    })
+  }, []);
+
 
   const onCommentClick = (event, id) => {
     setLoadingComments(true);
@@ -68,13 +72,11 @@ function Home(props) {
           {postsList}
         </div>
       </div>
-      <Detail
+      {/* <Detail
         comments={postComments}
         visible={detailVisible}
         onClose={onDetailClose}
-      />
+      /> */}
     </div>
   );
 }
-
-export default Home;

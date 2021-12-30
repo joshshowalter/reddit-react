@@ -2,6 +2,7 @@ import React from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import ReactDOM from 'react-dom';
 import Home from './home/home';
+import Detail from './detail/detail';
 // import Detail from './detail/detail';
 import './index.css';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
@@ -29,7 +30,8 @@ function App() {
           <Home />
         </Route>
         <Route path="/post/:id">
-          <Temp />
+          <Detail />
+          {/* <Temp /> */}
         </Route>
         <Route render={() => <Redirect to="/"/>}/>
       </Switch>
