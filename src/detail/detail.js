@@ -15,7 +15,6 @@ export default function Detail(props) {
 
   useEffect(() => {
     fetchPost(id).then(data => {
-      console.log('data', data);
       setState({ ...state, comments: data.comments})
     });
   }, id);
