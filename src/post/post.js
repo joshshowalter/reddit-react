@@ -82,32 +82,32 @@ export default function Post(props) {
 
   return (
     <Card className="post">
-      <Link to={`/post/${state.id}`}>
         {/* <CardActionArea onClick={postClick}> */}
         <CardActionArea>
-          <CardHeader style={{fontWeight: '300'}}
-            title={state.title}
-            subheader={state.subreddit + ' · Posted by ' + state.author}
-          />
-          {
-            state.media_embed &&
-            <div dangerouslySetInnerHTML={{ __html: state.media_embed }}></div>
-          }
-          {
-            !state.media_embed && state.preview &&
-            <CardMedia
-              style={{display: state.preview ? 'inherit' : 'none'}}
-              className="preview-image"
-              image={state.preview}
+          <Link to={`/post/${state.id}`}>
+            <CardHeader style={{fontWeight: '300'}}
+              title={state.title}
+              subheader={state.subreddit + ' · Posted by ' + state.author}
             />
-          }
+            {
+              state.media_embed &&
+              <div dangerouslySetInnerHTML={{ __html: state.media_embed }}></div>
+            }
+            {
+              !state.media_embed && state.preview &&
+              <CardMedia
+                style={{display: state.preview ? 'inherit' : 'none'}}
+                className="preview-image"
+                image={state.preview}
+              />
+            }
 
           {/* CardActionArea used to do the hover highlight. Could remove that and replace with CardContent with some CSS. 
           Probs better practice */}
           {/* <CardContent>
           </CardContent> */}
+          </Link>
         </CardActionArea>
-      </Link>
       <CardActions className="footer">
         <Button
           className="footer-button"

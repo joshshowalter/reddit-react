@@ -17,7 +17,7 @@ export default function Detail(props) {
     fetchPost(id).then(data => {
       setState({ ...state, comments: data.comments})
     });
-  }, id);
+  }, [id]);
 
   const onClose = (e) => {
     // this.props.onClose(e);

@@ -3,9 +3,9 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import ReactDOM from 'react-dom';
 import Home from './home/home';
 import Detail from './detail/detail';
-// import Detail from './detail/detail';
 import './index.css';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const theme = createMuiTheme({
   palette: {
@@ -22,19 +22,22 @@ const theme = createMuiTheme({
   }
 });
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
     <MuiThemeProvider theme={theme}>
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/post/:id">
-          <Detail />
-          {/* <Temp /> */}
-        </Route>
-        <Route render={() => <Redirect to="/"/>}/>
-      </Switch>
+      <QueryClientProvider client={queryClient}>
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route path="/post/:id">
+            <Detail />
+          </Route>
+          <Route render={() => <Redirect to="/"/>}/>
+        </Switch>
+      </QueryClientProvider>
     </MuiThemeProvider>
   );
 }
@@ -45,11 +48,3 @@ ReactDOM.render(
   </BrowserRouter>,
   document.getElementById('root')
 );
-
-function Temp() {
-  return (
-    <>
-      <div>Hello!</div>
-    </>
-  )
-}
